@@ -1,20 +1,22 @@
 package ua.edu.ucu.tries;
 import ua.edu.ucu.autocomplete.Dequeue;
-import java.util.ConcurrentModificationException;
-import java.util.Deque;
 import java.util.Iterator;
-import java.util.LinkedList;
+
+
 public class RWayTrie implements Trie {
     private static final int N = 26;
     private static final int FIRST_IN_ASCII = 'a';
     private TrieNode root;
     private int treeLength;
+
     private static class TrieNode {
         private Integer value;
         private TrieNode[] next = new TrieNode[N];
     }
+
     public RWayTrie() {
     }
+
     @Override
     public void add(Tuple t) {
         if (!contains(t.term)) {
@@ -48,7 +50,7 @@ public class RWayTrie implements Trie {
     }
 
     private TrieNode delete(TrieNode node, String word, int recCounter) {
-        if (node == null)  return null;
+        if (node == null) return null;
         if (recCounter == word.length()) {
             if (node.value != null) treeLength--;
             node.value = null;
@@ -57,13 +59,13 @@ public class RWayTrie implements Trie {
             node.next[letterNum] = delete(node.next[letterNum], word, recCounter + 1);
         }
 
-        if (node.value != null)   return node;
+        if (node.value != null) return node;
         for (int i = 0; i < N; i++)
             if (node.next[i] != null) return node;
         return null;
     }
-    private int numInASCII(char a)
-    {
+
+    private int numInASCII(char a) {
         return a - FIRST_IN_ASCII;
     }
 
@@ -100,7 +102,7 @@ public class RWayTrie implements Trie {
 
     private TrieNode get(TrieNode node, String key, int recCounter) {
         if (node == null) return null;
-        if (recCounter == key.length())   return node;
+        if (recCounter == key.length()) return node;
         int letterNum = numInASCII(key.charAt(recCounter));
         return get(node.next[letterNum], key, recCounter + 1);
     }
@@ -124,9 +126,10 @@ public class RWayTrie implements Trie {
         private TrieNode refNode;
         private String currentWord;
 
-
-        private Deque<String> words = new LinkedList<>();
-        private Deque<TrieNode[]> path = new LinkedList<>();
+        private Dequeue words = new Dequeue();
+        private Dequeue path = new Dequeue();
+//        private Deque<String> words = new LinkedList<>();
+//        private Deque<TrieNode[]> path = new LinkedList<>();
 
         public TrieIterator(String pref) {
             this.pref = pref;
@@ -134,8 +137,8 @@ public class RWayTrie implements Trie {
 
             if (refNode != null) {
                 if (isArrayNotEmpty(refNode.next, 0)) {
-                    path.offer(refNode.next);
-                    words.offer(pref);
+                    path.enqueue(refNode.next);
+                    words.enqueue(pref);
                 }
 
                 if (refNode.value != null) {
@@ -164,15 +167,15 @@ public class RWayTrie implements Trie {
 
         private String getWord() {
             while (!path.isEmpty()) {
-                TrieNode[] lastnodes = path.poll();
-                String lastWord = words.poll();
+                TrieNode[] lastnodes = (TrieNode[]) path.dequeue(2.2);
+                String lastWord = (String) words.dequeue(2);
 
                 for (int i = 0; i < N; i++) {
 
                     if (lastnodes[i] != null) {
                         if (isArrayNotEmpty(lastnodes[i].next, 0)) {
-                            path.offer(lastnodes[i].next);
-                            words.offer(lastWord + charByCode(i));
+                            path.enqueue(lastnodes[i].next);
+                            words.enqueue(lastWord + charByCode(i));
                         }
 
                         TrieNode tmp = lastnodes[i];
