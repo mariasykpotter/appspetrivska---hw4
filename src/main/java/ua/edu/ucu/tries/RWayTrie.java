@@ -1,6 +1,9 @@
 package ua.edu.ucu.tries;
 import ua.edu.ucu.autocomplete.Dequeue;
+
+import java.util.Deque;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 
 public class RWayTrie implements Trie {
@@ -126,10 +129,8 @@ public class RWayTrie implements Trie {
         private TrieNode refNode;
         private String currentWord;
 
-        private Dequeue words = new Dequeue();
-        private Dequeue path = new Dequeue();
-//        private Deque<String> words = new LinkedList<>();
-//        private Deque<TrieNode[]> path = new LinkedList<>();
+        private Deque<String> words = new LinkedList<>();
+        private Deque<TrieNode[]> path = new LinkedList<>();
 
         public TrieIterator(String pref) {
             this.pref = pref;
@@ -137,8 +138,8 @@ public class RWayTrie implements Trie {
 
             if (refNode != null) {
                 if (isArrayNotEmpty(refNode.next, 0)) {
-                    path.enqueue(refNode.next);
-                    words.enqueue(pref);
+                    path.offer(refNode.next);
+                    words.offer(pref);
                 }
 
                 if (refNode.value != null) {
@@ -167,15 +168,15 @@ public class RWayTrie implements Trie {
 
         private String getWord() {
             while (!path.isEmpty()) {
-                TrieNode[] lastnodes = (TrieNode[]) path.dequeue(2.2);
-                String lastWord = (String) words.dequeue(2);
+                TrieNode[] lastnodes = (TrieNode[]) path.poll();
+                String lastWord = (String) words.poll();
 
                 for (int i = 0; i < N; i++) {
 
                     if (lastnodes[i] != null) {
                         if (isArrayNotEmpty(lastnodes[i].next, 0)) {
-                            path.enqueue(lastnodes[i].next);
-                            words.enqueue(lastWord + charByCode(i));
+                            path.offer(lastnodes[i].next);
+                            words.offer(lastWord + charByCode(i));
                         }
 
                         TrieNode tmp = lastnodes[i];

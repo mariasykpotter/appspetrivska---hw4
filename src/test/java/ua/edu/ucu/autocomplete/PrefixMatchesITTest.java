@@ -13,17 +13,19 @@ public class PrefixMatchesITTest {
     private PrefixMatches pm2;
     private PrefixMatches pm3;
     private PrefixMatches pm4;
+
     @Before
     public void init() {
         pm1 = new PrefixMatches(new RWayTrie());
         pm1.load("abc", "abce", "abcd", "abcde", "abcdef");
         pm2 = new PrefixMatches(new RWayTrie());
-        pm2.load("li", "lit", "lio", "lion","little","lipppps");
+        pm2.load("li", "lit", "lio", "lion", "little", "lipppps");
         pm3 = new PrefixMatches(new RWayTrie());
         pm3.load("ra", "rad", "radf", "radfe", "radfet");
         pm4 = new PrefixMatches(new RWayTrie());
-        pm4.load("ra", "rac", "raco", "racoo","racoon");
+        pm4.load("ra", "rac", "raco", "racoo", "racoon");
     }
+
     @Test
     public void testWordsWithPrefix_String1() {
         String pref = "ab";
@@ -31,6 +33,7 @@ public class PrefixMatchesITTest {
         String[] expResult = {"abc", "abce", "abcd", "abcde", "abcdef"};
         assertThat(result, containsInAnyOrder(expResult));
     }
+
     @Test
     public void testWordsWithPrefix_String_and_K1() {
         String pref = "abc";
@@ -39,6 +42,7 @@ public class PrefixMatchesITTest {
         String[] expResult = {"abc", "abce", "abcd", "abcde"};
         assertThat(result, containsInAnyOrder(expResult));
     }
+
     @Test
     public void testWordsWithPrefix_LongString_and_K2() {
         String pref = "li";
@@ -47,13 +51,15 @@ public class PrefixMatchesITTest {
         String[] expResult = {"li", "lit", "lio", "lion"};
         assertThat(result, containsInAnyOrder(expResult));
     }
+
     @Test
-    public void testWordsWithPrefix_LongString2(){
+    public void testWordsWithPrefix_LongString2() {
         String pref = "li";
         Iterable<String> result = pm2.wordsWithPrefix(pref);
-        String[] expResult = {"li", "lit", "lio", "lion","little","lipppps"};
+        String[] expResult = {"li", "lit", "lio", "lion", "little", "lipppps"};
         assertThat(result, containsInAnyOrder(expResult));
     }
+
     @Test
     public void testWordsWithPrefix_LongString_and_K3() {
         String pref = "ra";
@@ -62,13 +68,15 @@ public class PrefixMatchesITTest {
         String[] expResult = {"ra", "rad", "radf"};
         assertThat(result, containsInAnyOrder(expResult));
     }
+
     @Test
-    public void testWordsWithPrefix_LongString3(){
+    public void testWordsWithPrefix_LongString3() {
         String pref = "ra";
         Iterable<String> result = pm3.wordsWithPrefix(pref);
-        String[] expResult = {"ra","rad", "radf", "radfe", "radfet"};
+        String[] expResult = {"ra", "rad", "radf", "radfe", "radfet"};
         assertThat(result, containsInAnyOrder(expResult));
     }
+
     @Test
     public void testWordsWithPrefix_LongString_and_K4() {
         String pref = "rac";
@@ -77,11 +85,12 @@ public class PrefixMatchesITTest {
         String[] expResult = {"rac", "raco", "racoo"};
         assertThat(result, containsInAnyOrder(expResult));
     }
+
     @Test
-    public void testWordsWithPrefix_LongString4(){
+    public void testWordsWithPrefix_LongString4() {
         String pref = "ra";
         Iterable<String> result = pm4.wordsWithPrefix(pref);
-        String[] expResult = {"ra","rac","raco", "racoo","racoon"};
+        String[] expResult = {"ra", "rac", "raco", "racoo", "racoon"};
         assertThat(result, containsInAnyOrder(expResult));
     }
 
